@@ -40,7 +40,7 @@ then
   bucket="$RYJO_BUCKET"
   cache_control_max_age="$RYJO_CACHE_CONTROL_MAX_AGE"
 else
-  bucket="${PWD##/*}"
+  bucket="${PWD##*/}"
   cache_control_max_age=86400
 fi
 
