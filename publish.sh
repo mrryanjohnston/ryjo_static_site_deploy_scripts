@@ -102,13 +102,6 @@ while :; do
   esac
 done
 
-if "$silent"
-then
-  ./check_aws.sh -s
-else
-  ./check_aws.sh
-fi
-
 if [ ! "$?" -eq 0 ]
 then
   exit "$?"

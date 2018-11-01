@@ -15,10 +15,9 @@ Use it like this:
 
 ## check_aws.sh
 
-This script is used to make sure aws-cli works correctly. It is run as part of
-`publish.sh`, so you don't need to run it separately if you do not want to.
-It'll give some good instructions on how to get your credentials from AWS to
-start using the `publish.sh` script. Use it like this:
+This script is used to make sure aws-cli works correctly. It'll give some good
+instructions on how to get your credentials from AWS to start using the
+`publish.sh` script. Use it like this:
 
 ```
 ./check_aws.sh
