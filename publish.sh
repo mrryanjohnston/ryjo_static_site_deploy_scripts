@@ -31,11 +31,22 @@ Can be configured with config file .ryjo.conf in present working directory.
 
     -s, --silent
         Don't display output. Helpful if you want to use this within other scripts.
+
+    -t, --content-type
+        Change the Content-Type for these files.
+
+        Can be configured in .ryjo.conf file like so:
+
+        RYJO_CONTENT_TYPE="application/json"
+
+        Default: text/html
+
 EOF
 }
 
 RYJO_BUCKET="${PWD##*/}"
 RYJO_CACHE_CONTROL_MAX_AGE=86400
+RYJO_CONTENT_TYPE="text/html"
 if [ -e "./.ryjo.conf" ]
 then
   source "./.ryjo.conf"
@@ -90,6 +101,25 @@ while :; do
       shift
       exit
       ;;
+    -t|--content-type)
+      if [ "$2" ]
+      then
+        RYJO_CONTENT_TYPE="$1"
+      else
+        echo "-t or --content-type requires a non-empty argument"
+        exit 1;
+      fi
+      shift
+      exit
+      ;;
+    --content-type=?*)
+      RYJO_CACHE_CONTROL_MAX_AGE=${1#*=}
+      RYJO_CONTENT_TYPE="${1#*=}"
+      ;;
+    --content-type=)
+      echo "-t or --content-type requires a non-empty argument"
+      exit 1;
+      ;;
     --)
       shift
       break
@@ -122,7 +152,7 @@ done
 for file in "$@"
 do
   printf "Publishing %s... " "$file"
-  result=$(aws s3api put-object --bucket "$RYJO_BUCKET" --key "$file" --body "$file" --cache-control "max-age=$RYJO_CACHE_CONTROL_MAX_AGE" 2>&1)
+  result=$(aws s3api put-object --bucket "$RYJO_BUCKET" --key "$file" --body "$file" --cache-control "max-age=$RYJO_CACHE_CONTROL_MAX_AGE" --content-type "$RYJO_CONTENT_TYPE" 2>&1)
   if [ "$?" -eq 0 ]
   then
     echo -e "${GREEN}Published${NC}"
