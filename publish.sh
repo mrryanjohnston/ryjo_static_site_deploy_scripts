@@ -59,13 +59,12 @@ while :; do
     -b|--bucket)
       if [ "$2" ]
       then
-        RYJO_BUCKET="$1"
+        RYJO_BUCKET="$2"
+        shift
       else
         echo "-b or --bucket requires a non-empty argument"
         exit 1;
       fi
-      shift
-      exit
       ;;
     --bucket=?*)
       RYJO_BUCKET=${1#*=}
@@ -77,13 +76,12 @@ while :; do
     -c|--cache-control-max-age)
       if [ "$2" ]
       then
-        RYJO_CACHE_CONTROL_MAX_AGE="$1"
+        RYJO_CACHE_CONTROL_MAX_AGE="$2"
+        shift
       else
         echo "-c or --cache-control-max-age requires a non-empty argument"
         exit 1;
       fi
-      shift
-      exit
       ;;
     --cache-control-max-age=?*)
       RYJO_CACHE_CONTROL_MAX_AGE=${1#*=}
@@ -98,22 +96,18 @@ while :; do
       ;;
     -s|--silent)
       silent=true
-      shift
-      exit
       ;;
     -t|--content-type)
       if [ "$2" ]
       then
-        RYJO_CONTENT_TYPE="$1"
+        RYJO_CONTENT_TYPE="$2"
+        shift
       else
         echo "-t or --content-type requires a non-empty argument"
         exit 1;
       fi
-      shift
-      exit
       ;;
     --content-type=?*)
-      RYJO_CACHE_CONTROL_MAX_AGE=${1#*=}
       RYJO_CONTENT_TYPE="${1#*=}"
       ;;
     --content-type=)
@@ -127,6 +121,8 @@ while :; do
     *)
       break
   esac
+
+  shift
 done
 
 if [ ! "$?" -eq 0 ]

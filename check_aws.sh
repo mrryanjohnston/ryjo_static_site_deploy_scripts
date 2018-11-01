@@ -9,7 +9,6 @@ while :; do
   case "$1" in 
     -s|--silent)
       silent=true
-      shift
       ;;
     --)
       shift
@@ -18,6 +17,8 @@ while :; do
     *)
       break
   esac
+
+  shift
 done
 
 if [ "$silent" = false ]
@@ -27,11 +28,17 @@ fi
 
 if [ ! "$(command -v aws)" ]
 then
-  echo -e "${RED}Nope.${NC}"
-  echo "You'll need to install aws-cli first."
+  if [ "$silent" = false ]
+  then
+    echo -e "${RED}Nope.${NC}"
+    echo "You'll need to install aws-cli first."
+  fi
   exit 1;
 else
-  echo -e "${GREEN}Yep!${NC}"
+  if [ "$silent" = false ]
+  then
+    echo -e "${GREEN}Yep!${NC}"
+  fi
 fi
 
 if [ "$silent" = false ]
