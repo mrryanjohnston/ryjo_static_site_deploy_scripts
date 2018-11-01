@@ -34,14 +34,11 @@ Can be configured with config file .ryjo.conf in present working directory.
 EOF
 }
 
+RYJO_BUCKET="${PWD##*/}"
+RYJO_CACHE_CONTROL_MAX_AGE=86400
 if [ -e "./.ryjo.conf" ]
 then
   source "./.ryjo.conf"
-  bucket="$RYJO_BUCKET"
-  cache_control_max_age="$RYJO_CACHE_CONTROL_MAX_AGE"
-else
-  bucket="${PWD##*/}"
-  cache_control_max_age=86400
 fi
 
 silent=false
@@ -51,7 +48,7 @@ while :; do
     -b|--bucket)
       if [ "$2" ]
       then
-        bucket="$1"
+        RYJO_BUCKET="$1"
       else
         echo "-b or --bucket requires a non-empty argument"
         exit 1;
@@ -60,7 +57,7 @@ while :; do
       exit
       ;;
     --bucket=?*)
-      bucket=${1#*=}
+      RYJO_BUCKET=${1#*=}
       ;;
     --bucket=)
       echo "-b or --bucket requires a non-empty argument"
@@ -69,7 +66,7 @@ while :; do
     -c|--cache-control-max-age)
       if [ "$2" ]
       then
-        cache_control_max_age="$1"
+        RYJO_CACHE_CONTROL_MAX_AGE="$1"
       else
         echo "-c or --cache-control-max-age requires a non-empty argument"
         exit 1;
@@ -78,7 +75,7 @@ while :; do
       exit
       ;;
     --cache-control-max-age=?*)
-      cache_control_max_age=${1#*=}
+      RYJO_CACHE_CONTROL_MAX_AGE=${1#*=}
       ;;
     --cache-control-max-age=)
       echo "-c or --cache-control-max-age requires a non-empty argument"
@@ -125,7 +122,7 @@ done
 for file in "$@"
 do
   printf "Publishing %s... " "$file"
-  result=$(aws s3api put-object --bucket "$bucket" --key "$file" --body "$file" --cache-control "max-age=$cache_control_max_age" 2>&1)
+  result=$(aws s3api put-object --bucket "$RYJO_BUCKET" --key "$file" --body "$file" --cache-control "max-age=$RYJO_CACHE_CONTROL_MAX_AGE" 2>&1)
   if [ "$?" -eq 0 ]
   then
     echo -e "${GREEN}Published${NC}"
