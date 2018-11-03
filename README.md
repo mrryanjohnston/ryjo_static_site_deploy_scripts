@@ -29,12 +29,18 @@ This script is used to publish files to s3. Use it like this:
 
 ```
 ./publish.sh index.html articles/foo.html
+
 # Or, when you're in the directory of the site you want to publish:
 ../ryjo_static_site_deploy_scripts/publish.sh index.html articles/foo.html
+
 # Or, if you've run install.sh:
 publish.sh index.html articles/foo.html
+
 # You can get a full explanation of the command by using -h:
 publish.sh -h
+
+# Want to just publish your entire directory?
+find * -type f | xargs publish.sh
 ```
 
 ## uninstall.sh
