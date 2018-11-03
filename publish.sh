@@ -33,20 +33,25 @@ Can be configured with config file .ryjo.conf in present working directory.
         Don't display output. Helpful if you want to use this within other scripts.
 
     -t, --content-type
-        Change the Content-Type for these files.
+        Override the automatically detected Content-Type for these files.
 
-        Can be configured in .ryjo.conf file like so:
+        Default: automatically detected, falls back on RYJO_DEFAULT_CONTENT_TYPE
+        (which is text/plain by default).
 
-        RYJO_CONTENT_TYPE="application/json"
+        Note:
+        This just uses the file's extension because using file or magic to
+        detect it can return unexpected results for css. If it is not found in
+        the (very short) list of supported extensions, it'll use the default
+        configured mimetype:
 
-        Default: text/html
+        RYJO_DEFAULT_CONTENT_TYPE=text/html
 
 EOF
 }
 
 RYJO_BUCKET="${PWD##*/}"
 RYJO_CACHE_CONTROL_MAX_AGE=86400
-RYJO_CONTENT_TYPE="text/html"
+RYJO_DEFAULT_CONTENT_TYPE="text/plain"
 if [ -e "./.ryjo.conf" ]
 then
   source "./.ryjo.conf"
@@ -145,10 +150,31 @@ do
   fi
 done
 
+declare -A filetypes
+filetypes=(
+  ["css"]="text/css"
+  ["html"]="text/html"
+  ["js"]="application/javascript"
+  ["json"]="application/json"
+  ["txt"]="text/plain"
+)
+
 for file in "$@"
 do
-  printf "Publishing %s... " "$file"
-  result=$(aws s3api put-object --bucket "$RYJO_BUCKET" --key "$file" --body "$file" --cache-control "max-age=$RYJO_CACHE_CONTROL_MAX_AGE" --content-type "$RYJO_CONTENT_TYPE" 2>&1)
+  if [ "$RYJO_CONTENT_TYPE" ]
+  then
+    mimetype="$RYJO_CONTENT_TYPE"
+  else
+    filename="${file##*/}"
+    extension="${filename##*.}"
+    mimetype=${filetypes["$extension"]}
+    if [ ! "$mimetype" ]
+    then
+      mimetype="$RYJO_DEFAULT_CONTENT_TYPE"
+    fi
+  fi
+  printf "Publishing %s as %s... " "$file" "$mimetype"
+  result=$(aws s3api put-object --bucket "$RYJO_BUCKET" --key "$file" --body "$file" --cache-control "max-age=$RYJO_CACHE_CONTROL_MAX_AGE" --content-type "$mimetype" 2>&1)
   if [ "$?" -eq 0 ]
   then
     echo -e "${GREEN}Published${NC}"
