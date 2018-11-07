@@ -14,6 +14,16 @@ Use it like this:
 ./install.sh
 ```
 
+## add_item_to_rss_feed.sh
+
+This script adds items to your RSS feed. Use it like this:
+
+```bash
+add_item_to_rss_feed.sh articles/foo.html
+# To show everything this command can do:
+add_item_to_rss_feed.sh -h
+```
+
 ## check_aws.sh
 
 This script is used to make sure aws-cli works correctly. It'll give some good
@@ -23,6 +33,16 @@ instructions on how to get your credentials from AWS to start using the
 ```bash
 ./check_aws.sh
 ```
+## init_rss_feed.sh
+
+This script creates an RSS feed. Use it like this:
+
+```bash
+init_rss_feed.sh
+# To show everything this command can do:
+init_rss_feed.sh -h
+```
+
 
 ## publish.sh
 
