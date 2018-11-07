@@ -130,11 +130,6 @@ while :; do
   shift
 done
 
-if [ ! "$?" -eq 0 ]
-then
-  exit "$?"
-fi
-
 if [ "$#" -eq 0 ]
 then
   echo "You must pass files to be published!"
@@ -156,6 +151,7 @@ filetypes=(
   ["html"]="text/html"
   ["js"]="application/javascript"
   ["json"]="application/json"
+  ["rss"]="application/rss+xml"
   ["txt"]="text/plain"
 )
 
