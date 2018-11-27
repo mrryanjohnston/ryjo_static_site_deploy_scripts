@@ -156,6 +156,7 @@ filetypes=(
   ["rss"]="application/rss+xml"
   ["svg"]="image/svg+xml"
   ["txt"]="text/plain"
+  ["webmanifest"]="application/manifest+json"
   ["xml"]="application/xml"
 )
 
