@@ -149,10 +149,14 @@ declare -A filetypes
 filetypes=(
   ["css"]="text/css"
   ["html"]="text/html"
+  ["ico"]="image/x-icon"
   ["js"]="application/javascript"
   ["json"]="application/json"
+  ["png"]="image/png"
   ["rss"]="application/rss+xml"
+  ["svg"]="image/svg+xml"
   ["txt"]="text/plain"
+  ["xml"]="application/xml"
 )
 
 for file in "$@"

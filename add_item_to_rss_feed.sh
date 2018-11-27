@@ -209,7 +209,7 @@ fi
 
 if [ ! "$RYJO_RSS_FEED_ITEM_DESCRIPTION" ]
 then
-  RYJO_RSS_FEED_ITEM_DESCRIPTION=$(awk 'match($0, /<meta name="description" content="(.*)"/, a) {print a[1]}' "$1")
+  RYJO_RSS_FEED_ITEM_DESCRIPTION=$(awk 'match($0, /<meta name="description" content="(.*)"/, a) {print a[1]; exit}' "$1")
 fi
 
 if [ ! "$RYJO_RSS_FEED_ITEM_GUID" ]
@@ -235,7 +235,7 @@ fi
 
 if [ ! "$RYJO_RSS_FEED_ITEM_TITLE" ]
 then
-  RYJO_RSS_FEED_ITEM_TITLE=$(awk 'match($0, /<meta name="title" content="(.*)"/, a) {print a[1]}' "$1")
+  RYJO_RSS_FEED_ITEM_TITLE=$(awk 'match($0, /<meta name="title" content="(.*)"/, a) {print a[1]; exit}' "$1")
 fi
 
 ITEM_XML="    <item>\n      <title>$RYJO_RSS_FEED_ITEM_TITLE</title>\n      <description>$RYJO_RSS_FEED_ITEM_DESCRIPTION</description>\n      <link>$RYJO_RSS_FEED_ITEM_LINK</link>\n      <guid>$RYJO_RSS_FEED_ITEM_GUID</guid>\n      <pubDate>$RYJO_RSS_FEED_ITEM_PUBDATE</pubDate>\n    </item>"
