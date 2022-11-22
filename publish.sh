@@ -152,6 +152,7 @@ filetypes=(
   ["ico"]="image/x-icon"
   ["js"]="application/javascript"
   ["json"]="application/json"
+  ["jpg"]="image/jpeg"
   ["png"]="image/png"
   ["rss"]="application/rss+xml"
   ["svg"]="image/svg+xml"
